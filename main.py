@@ -19,7 +19,7 @@ from ulauncher.api.shared.item.ExtensionResultItem import ExtensionResultItem
 logger = logging.getLogger(__name__)
 extension_home = str(pathlib.Path(__file__).parent.resolve())
 
-description_active = "{}   |   ACTIVE"
+description_active = "{}  |  ACTIVE"
 description_inactive = "{}"
 
 
