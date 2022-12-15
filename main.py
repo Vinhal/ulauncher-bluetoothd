@@ -87,16 +87,16 @@ class ItemEnterEventListener(EventListener):
         if extension.preferences.get("enable_notifications") == "true":
             if not result:
                 # Operation failed
-                send_notification("ERROR: " + log)
+                send_notification("ERROR: ", log)
             elif device["reset"]:
                 # Success, reseted
-                send_notification("Device reseted: " + device["name"])
+                send_notification(device["name"], "Device reseted.")
             elif device["active"]:
                 # Success, disconnected
-                send_notification("Device disconnected: " + device["name"])
+                send_notification(device["name"], "Device disconnected.")
             else:
                 # Success, connected
-                send_notification("Device connected: " + device["name"])
+                send_notification(device["name"], "Device connected.")
 
         # Run script if successfully connected and script isn't empty
         script = extension.preferences.get("script_on_connect")
@@ -104,14 +104,12 @@ class ItemEnterEventListener(EventListener):
             subprocess.run([script, device["name"], device["uuid"]], stdout=subprocess.PIPE)
 
 
-def send_notification(text):
-    logger.debug("Sent notification: " + text)
+def send_notification(title, message):
+    logger.debug("Sent notification: " + title, message)
     subprocess.run(["notify-send",
                     "-h", "int:transient:1",
                     "--icon=" + os.path.dirname(os.path.realpath(__file__)) + "/images/icon.png",
-                    text,
-                    "ULauncher BluetoothManager"
-                    ])
+                    title, message])
 
 
 if __name__ == '__main__':
