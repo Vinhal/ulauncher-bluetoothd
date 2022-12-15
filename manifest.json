@@ -1,6 +1,6 @@
 {
   "required_api_version": "^2.0.0",
-  "name": "Bluetooth Manager",
+  "name": "Bluetooth",
   "description": "Connect or disconnect Bluetooth devices",
   "developer_name": "Melian Miko and Lucas Vinhal",
   "icon": "images/icon.png",
@@ -8,7 +8,7 @@
     {
       "id": "base_keyword",
       "type": "keyword",
-      "name": "Bluetooth Manager",
+      "name": "Bluetooth",
       "description": "",
       "default_value": "bt"
     },
