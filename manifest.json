@@ -1,6 +1,6 @@
 {
   "required_api_version": "^2.0.0",
-  "name": "BluetoothManager",
+  "name": "Bluetooth Manager",
   "description": "Connect or disconnect Bluetooth devices",
   "developer_name": "MelianMiko and LucasVinhal",
   "icon": "images/icon.png",
@@ -8,7 +8,7 @@
     {
       "id": "base_keyword",
       "type": "keyword",
-      "name": "Main keyword",
+      "name": "Bluetooth Manager",
       "description": "",
       "default_value": "bt"
     },
@@ -23,7 +23,7 @@
       "id": "low_battery",
       "type": "input",
       "name": "Low battery percentage",
-      "description": "Maximum of batteray percentage to be notified as low battery",
+      "description": "Maximum of battery percentage to be notified as low battery",
       "default_value": "20"
     },
     {
