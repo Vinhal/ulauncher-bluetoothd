@@ -44,10 +44,10 @@ class KeywordQueryEventListener(EventListener):
             if search_query is not None and search_query not in name.lower():
                 continue
 
-            description = description_active if device["active"] else description_inactive
-            description = description.format(device["uuid"])
             icon_name = "{}_{}".format(device["icon"], device["active"])
             icon_path = 'images/{}.png'.format(icon_name)
+            description = description_active if device["active"] else description_inactive
+            description = description.format(device["uuid"] + " | " + icon_name )
 
             if not os.path.isfile(extension_home + "/" + icon_path):
                 logger.warning("Icon not found: " + icon_path)
