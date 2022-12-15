@@ -1,3 +1,4 @@
+import copy
 import logging
 import os.path
 import subprocess
@@ -53,7 +54,7 @@ class KeywordQueryEventListener(EventListener):
                 logger.warning("Icon not found: " + icon_path)
                 icon_path = "images/default_{}.png".format(device["active"])
 
-            device_to_reset = device
+            device_to_reset = copy.deepcopy(device)
             device_to_reset['reset'] = device["active"]
 
             on_click_event = ExtensionCustomAction(device, keep_app_open=False)
