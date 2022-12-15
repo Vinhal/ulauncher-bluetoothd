@@ -93,7 +93,8 @@ class ItemEnterEventListener(EventListener):
                 # Success, disconnected
                 send_notification(device["name"], "Device disconnected.")
             else:
-                device_battery = bt_tools.get_battery_percentage(path)
+                updated_device = bt_tools.get_device(path)
+                device_battery = updated_device.get("battery")
 
                 # Success, connected
                 send_notification(device["name"], "Device connected. bt {}".format(device_battery)

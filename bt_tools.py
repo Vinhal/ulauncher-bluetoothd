@@ -50,36 +50,32 @@ def get_devices():
     devices = []
     for path in all_objects:
         if "org.bluez.Device1" in all_objects[path]:
-            device1 = dbus.Interface(system.get_object("org.bluez", path),
-                                     "org.freedesktop.DBus.Properties")
-
-            props = dbus_to_python(device1.GetAll("org.bluez.Device1"))
-
-            devices.append({
-                "name": props.get("Name", "Unnamed device"),
-                "uuid": props.get("Address", "Unknown address"),
-                "icon": props.get("Icon", "default"),
-                "active": props.get("Connected", False),
-                "battery": extract_battery_percentage(device1) if props.get("Connected", False) else None,
-                "dbus_path": str(path)
-            })
+            devices.append(get_device(path, system))
 
     return devices
 
+def get_device(path, system = None):
+    system = system if system is not None else dbus.SystemBus()
+    device1 = dbus.Interface(system.get_object("org.bluez", path),
+                                     "org.freedesktop.DBus.Properties")
 
-def extract_battery_percentage(device1):
+    props = dbus_to_python(device1.GetAll("org.bluez.Device1"))
+
+    return {
+        "name": props.get("Name", "Unnamed device"),
+        "uuid": props.get("Address", "Unknown address"),
+        "icon": props.get("Icon", "default"),
+        "active": props.get("Connected", False),
+        "battery": get_battery_percentage(device1) if props.get("Connected", False) else None,
+        "dbus_path": str(path)
+    }
+
+
+def get_battery_percentage(device1):
     try:
         return int(device1.GetAll("org.bluez.Battery1")["Percentage"])
     except:
         return None
-
-def get_battery_percentage(path):
-    system = dbus.SystemBus()
-    device1 =  dbus.Interface(system.get_object("org.bluez", path),
-                                     "org.freedesktop.DBus.Properties")
-
-    return extract_battery_percentage(device1)
-
 
 # From https://stackoverflow.com/questions/11486443/dbus-python-how-to-get-response-with-native-types
 def dbus_to_python(data):
