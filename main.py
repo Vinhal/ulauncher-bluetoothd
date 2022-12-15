@@ -90,7 +90,7 @@ class ItemEnterEventListener(EventListener):
                 send_notification("ERROR: ", log)
             elif device["reset"]:
                 # Success, reseted
-                send_notification(device["name"], "Device reseted.")
+                send_notification(device["name"], "Device connection reseted.")
             elif device["active"]:
                 # Success, disconnected
                 send_notification(device["name"], "Device disconnected.")
