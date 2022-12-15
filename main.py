@@ -1,4 +1,3 @@
-import copy
 import logging
 import os.path
 import subprocess
@@ -54,17 +53,15 @@ class KeywordQueryEventListener(EventListener):
                 logger.warning("Icon not found: " + icon_path)
                 icon_path = "images/default_{}.png".format(device["active"])
 
-            device_to_reset = copy.deepcopy(device)
-            device_to_reset['reset'] = device["active"]
-
-            on_click_event = ExtensionCustomAction(device, keep_app_open=False)
-            on_alt_enter_event = ExtensionCustomAction(device_to_reset, keep_app_open=False)
+            def on_click(reset = False):
+                device['reset'] = reset and device["active"]
+                return ExtensionCustomAction(device, keep_app_open=False)
             
             item_row = ExtensionResultItem(icon=icon_path,
                                            name=name,
                                            description=description,
-                                           on_enter=on_click_event,
-                                           on_alt_enter=on_alt_enter_event)
+                                           on_enter=on_click(),
+                                           on_alt_enter=on_click(True))
             items.append(item_row)
 
         return RenderResultListAction(items)
