@@ -19,8 +19,8 @@ from ulauncher.api.shared.item.ExtensionResultItem import ExtensionResultItem
 logger = logging.getLogger(__name__)
 extension_home = str(pathlib.Path(__file__).parent.resolve())
 
-description_active = "{} | ACTIVE | Select to disconnect"
-description_inactive = "{} | Select to connect"
+description_active = "{} | ACTIVE"
+description_inactive = "{}"
 
 
 class BluetoothManagerExtension(Extension):
@@ -47,7 +47,7 @@ class KeywordQueryEventListener(EventListener):
             icon_name = "{}_{}".format(device["icon"], device["active"])
             icon_path = 'images/{}.png'.format(icon_name)
             description = description_active if device["active"] else description_inactive
-            description = description.format(device["uuid"] + " | " + icon_name )
+            description = description.format(device["uuid"] )
 
             if not os.path.isfile(extension_home + "/" + icon_path):
                 logger.warning("Icon not found: " + icon_path)
