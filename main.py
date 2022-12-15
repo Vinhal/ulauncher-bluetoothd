@@ -94,14 +94,14 @@ class ItemEnterEventListener(EventListener):
                 # Success, disconnected
                 send_notification(device["name"], "Device disconnected.")
             else:
-                time.sleep(1)
+                time.sleep(2)
 
                 # Notify battery percentage if successfully connected
                 battery = bt_tools.get_device(path).get("battery")
                 
                 # Success, connected
                 send_notification(device["name"], "Device connected." +
-                    " Battery: {}".format(get_battery_percentage(battery)) if battery is not None else "")
+                    (" Battery: {}".format(get_battery_percentage(battery)) if battery is not None else ""))
 
         # Run script if successfully connected and script isn't empty
         script = extension.preferences.get("script_on_connect")
