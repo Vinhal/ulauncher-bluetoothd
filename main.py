@@ -20,7 +20,7 @@ from ulauncher.api.shared.item.ExtensionResultItem import ExtensionResultItem
 logger = logging.getLogger(__name__)
 extension_home = str(pathlib.Path(__file__).parent.resolve())
 
-description_active = "{}  |  ACTIVE  |  {}%"
+description_active = "{}  |  ACTIVE  |  {}"
 description_inactive = "{}"
 
 
@@ -48,7 +48,7 @@ class KeywordQueryEventListener(EventListener):
             icon_name = "{}_{}".format(device["icon"], device["active"])
             icon_path = 'images/{}.png'.format(icon_name)
             description = description_active if device["active"] else description_inactive
-            description = description.format(device["uuid"], device["battery"])
+            description = description.format(device["uuid"], get_battery_percentage(device["battery"]))
 
             if not os.path.isfile(extension_home + "/" + icon_path):
                 logger.warning("Icon not found: " + icon_path)
@@ -102,13 +102,12 @@ class ItemEnterEventListener(EventListener):
         if not device["active"] and script != "" and result:
             subprocess.run([script, device["name"], device["uuid"]], stdout=subprocess.PIPE)
 
+        # Notify battery percentage if successfully connected
         if not device["active"]:
-            time.sleep(5)
-            updated_device = bt_tools.get_device(path)
-            if updated_device.get("battery") is not None:
-                send_notification(device["name"], "Battery: {}".format(updated_device.get("battery")))
-            else:
-                send_notification(device["name"], "Battery not found: {} df".format(updated_device.get("battery")))
+            time.sleep(2)
+            battery = bt_tools.get_device(path).get("battery")
+            if battery is not None:
+                send_notification(device["name"], "Battery: {}".format(get_battery_percentage(battery)))
 
 
 def send_notification(title, message):
@@ -117,6 +116,10 @@ def send_notification(title, message):
                     "-h", "int:transient:1",
                     "--icon=" + os.path.dirname(os.path.realpath(__file__)) + "/images/icon.png",
                     title, message])
+
+def get_battery_percentage(battery):
+    if battery is None: return ""
+    return "{}%  {}".format(battery, "🔋" if battery > 20 else "🪫")
 
 
 if __name__ == '__main__':
