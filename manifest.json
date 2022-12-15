@@ -22,8 +22,8 @@
     {
       "id": "low_battery",
       "type": "input",
-      "name": "Percentage to be notified as low battery",
-      "description": "Optional",
+      "name": "Low battery percentage",
+      "description": "Maximum of batteray percentage to be notified as low battery",
       "default_value": "20"
     },
     {
