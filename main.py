@@ -88,12 +88,15 @@ class ItemEnterEventListener(EventListener):
             if not result:
                 # Operation failed
                 send_notification("ERROR: " + log)
+            elif device["reset"]:
+                # Success, reseted
+                send_notification("Device reseted: " + device["name"])
             elif device["active"]:
                 # Success, disconnected
-                send_notification("Now disconnected: " + device["name"])
+                send_notification("Device disconnected: " + device["name"])
             else:
                 # Success, connected
-                send_notification("Now connected: " + device["name"])
+                send_notification("Device connected: " + device["name"])
 
         # Run script if successfully connected and script isn't empty
         script = extension.preferences.get("script_on_connect")
