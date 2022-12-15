@@ -119,7 +119,7 @@ def send_notification(title, message):
 
 def get_battery_percentage(battery):
     if battery is None: return ""
-    return "{}%  {}".format(battery, "🔋" if battery > 20 else "🪫")
+    return "{} {}%".format("🔋" if battery > 20 else "🪫", battery)
 
 
 if __name__ == '__main__':
