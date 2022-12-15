@@ -28,6 +28,19 @@ def disconnect(path):
         return False, str(e)
 
 
+def reset(path):
+    system = dbus.SystemBus()
+    device1 = dbus.Interface(system.get_object("org.bluez", path),
+                             "org.bluez.Device1")
+
+    try:
+        device1.Disconnect()
+        device1.Connect()
+        return True, ""
+    except dbus.exceptions.DBusException as e:
+        return False, str(e)
+
+
 def get_devices():
     system = dbus.SystemBus()
     bluez = dbus.Interface(system.get_object("org.bluez", "/"),

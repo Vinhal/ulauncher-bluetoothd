@@ -53,11 +53,16 @@ class KeywordQueryEventListener(EventListener):
                 logger.warning("Icon not found: " + icon_path)
                 icon_path = "images/default_{}.png".format(device["active"])
 
+            device_to_reset = device
+            device_to_reset['reset'] = device["active"]
+
             on_click_event = ExtensionCustomAction(device, keep_app_open=False)
+            on_alt_enter_event = ExtensionCustomAction(device_to_reset, keep_app_open=False)
             item_row = ExtensionResultItem(icon=icon_path,
                                            name=name,
                                            description=description,
-                                           on_enter=on_click_event)
+                                           on_enter=on_click_event,
+                                           on_alt_enter=on_alt_enter_event)
             items.append(item_row)
 
         return RenderResultListAction(items)
@@ -68,7 +73,9 @@ class ItemEnterEventListener(EventListener):
         device = event.get_data()
         path = device["dbus_path"]
 
-        if device["active"]:
+        if device["reset"]:
+            result, log = bt_tools.reset(path)
+        elif device["active"]:
             result, log = bt_tools.disconnect(path)
         else:
             result, log = bt_tools.connect(path)
