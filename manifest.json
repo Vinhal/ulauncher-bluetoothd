@@ -20,6 +20,13 @@
       "default_value": ""
     },
     {
+      "id": "low_battery",
+      "type": "input",
+      "name": "Percentage to be notified as low battery",
+      "description": "Optional",
+      "default_value": "20"
+    },
+    {
       "id": "enable_notifications",
       "type": "select",
       "name": "Enable notifications",

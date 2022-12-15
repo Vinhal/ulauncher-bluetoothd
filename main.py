@@ -48,7 +48,7 @@ class KeywordQueryEventListener(EventListener):
             icon_name = "{}_{}".format(device["icon"], device["active"])
             icon_path = 'images/{}.png'.format(icon_name)
             description = description_active if device["active"] else description_inactive
-            description = description.format(device["uuid"], get_battery_percentage(device["battery"]))
+            description = description.format(device["uuid"], get_battery_percentage(device["battery"], extension))
 
             if not os.path.isfile(extension_home + "/" + icon_path):
                 logger.warning("Icon not found: " + icon_path)
@@ -101,7 +101,7 @@ class ItemEnterEventListener(EventListener):
                 
                 # Success, connected
                 send_notification(device["name"], "Device connected." +
-                    (" Battery: {}".format(get_battery_percentage(battery)) if battery is not None else ""))
+                    (" Battery: {}".format(get_battery_percentage(battery, extension)) if battery is not None else ""))
 
         # Run script if successfully connected and script isn't empty
         script = extension.preferences.get("script_on_connect")
@@ -116,9 +116,11 @@ def send_notification(title, message):
                     "--icon=" + os.path.dirname(os.path.realpath(__file__)) + "/images/icon.png",
                     title, message])
 
-def get_battery_percentage(battery):
+def get_battery_percentage(battery, extension):
+    low_battery = extension.preferences.get("low_battery")
+
     if battery is None: return ""
-    return "{} {}%".format("🔋" if battery > 20 else "🪫", battery)
+    return "{} {}%".format("🔋" if battery > low_battery else "🪫", battery)
 
 
 if __name__ == '__main__':
