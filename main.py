@@ -2,6 +2,7 @@ import logging
 import os.path
 import subprocess
 import pathlib
+import time
 
 import gi
 
@@ -93,17 +94,21 @@ class ItemEnterEventListener(EventListener):
                 # Success, disconnected
                 send_notification(device["name"], "Device disconnected.")
             else:
-                updated_device = bt_tools.get_device(path)
-                device_battery = updated_device.get("battery")
-
                 # Success, connected
-                send_notification(device["name"], "Device connected. bt {}".format(device_battery)
-                    + (" Battery: {}%".format(device_battery) if device_battery is not None else ""))
+                send_notification(device["name"], "Device connected")
 
         # Run script if successfully connected and script isn't empty
         script = extension.preferences.get("script_on_connect")
         if not device["active"] and script != "" and result:
             subprocess.run([script, device["name"], device["uuid"]], stdout=subprocess.PIPE)
+
+        if not device["active"]:
+            time.sleep(5)
+            updated_device = bt_tools.get_device(path)
+            if updated_device.get("battery") is not None:
+                send_notification(device["name"], "Battery: {}".format(updated_device.get("battery")))
+            else:
+                send_notification(device["name"], "Battery not found: {} df".format(updated_device.get("battery")))
 
 
 def send_notification(title, message):
