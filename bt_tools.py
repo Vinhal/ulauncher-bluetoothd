@@ -52,6 +52,7 @@ def get_devices():
         if "org.bluez.Device1" in all_objects[path]:
             device1 = dbus.Interface(system.get_object("org.bluez", path),
                                      "org.freedesktop.DBus.Properties")
+
             props = dbus_to_python(device1.GetAll("org.bluez.Device1"))
 
             devices.append({
@@ -59,10 +60,17 @@ def get_devices():
                 "uuid": props.get("Address", "Unknown address"),
                 "icon": props.get("Icon", "default"),
                 "active": props.get("Connected", False),
+                "battery": get_battery_percentage(device1) if props.get("Connected", False) else None,
                 "dbus_path": str(path)
             })
 
     return devices
+
+def get_battery_percentage(device):
+    try:
+        return int(device.GetAll("org.bluez.Battery1")["Percentage"])
+    except:
+        return None
 
 
 # From https://stackoverflow.com/questions/11486443/dbus-python-how-to-get-response-with-native-types
