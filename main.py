@@ -117,10 +117,13 @@ def send_notification(title, message):
                     title, message])
 
 def get_battery_percentage(battery, extension):
-    low_battery = extension.preferences.get("low_battery")
+    try:
+        low_battery = int(extension.preferences.get("low_battery"))
 
-    if battery is None: return ""
-    return "{} {}%".format("🔋" if battery > low_battery else "🪫", battery)
+        if battery is None: return ""
+        return "{} {}%".format("🔋" if battery > low_battery else "🪫", battery)
+    except:
+        return ""
 
 
 if __name__ == '__main__':
